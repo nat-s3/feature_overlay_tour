@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 
 import '../../feature_overlay_tour.dart';
 import '../values/feature_overlay_tour_state.dart';
-import 'feature_overlay_tour_overlay.dart';
-import 'package:flutter/material.dart';
+import 'fot_overlay_view.dart';
 
 class FeatureOverlayTour extends StatefulWidget {
   const FeatureOverlayTour({
@@ -13,12 +13,19 @@ class FeatureOverlayTour extends StatefulWidget {
   final Widget child;
 
   @override
-  State<FeatureOverlayTour> createState() => _FeatureOverlayTourState();
+  State<FeatureOverlayTour> createState() => _FeatureOverlayTourState2();
+
+  static FOTScope of(BuildContext context) =>
+      FOTScope.of(context);
+
+  static FOTScope once(BuildContext context) =>
+      FOTScope.once(context);
+
 }
 
-class _FeatureOverlayTourState extends State<FeatureOverlayTour> {
+class _FeatureOverlayTourState2 extends State<FeatureOverlayTour> {
   // AnimationController? animateController;
-  FeatureOverlayTourController? controller;
+  FOTController? controller;
 
   FeatureOverlayTourState? lastState;
 
@@ -26,7 +33,7 @@ class _FeatureOverlayTourState extends State<FeatureOverlayTour> {
 
   @override
   void initState() {
-    final tourCon = FeatureOverlayTourController();
+    final tourCon = FOTController();
     controller = tourCon;
 
     lastState = tourCon.state.value;
@@ -48,7 +55,7 @@ class _FeatureOverlayTourState extends State<FeatureOverlayTour> {
       return const Center();
     }
 
-    return FeatureOverlayTourScope(
+    return FOTScope(
       controller: controller!,
       child: widget.child,
     );
@@ -62,7 +69,7 @@ class _FeatureOverlayTourState extends State<FeatureOverlayTour> {
       // hide -> show
       entry = OverlayEntry(
         builder: (context) {
-          return FeatureOverlayTourOverlay(controller: controller!);
+          return FOTOverlayView(controller: controller!);
         },
       );
       Overlay.of(context).insert(entry!);

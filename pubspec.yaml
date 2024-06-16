@@ -1,6 +1,6 @@
 name: feature_overlay_tour
 description: "A simple Flutter package for adding tooltip-like descriptions to buttons and other elements."
-version: 0.0.1
+version: 0.0.2
 publish_to: 'none'
 
 environment:

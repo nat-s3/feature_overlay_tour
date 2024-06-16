@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import 'package:feature_overlay_tour/src/widgets/feature_overlay_tour_scope.dart';
+import 'package:feature_overlay_tour/src/model/overlay_layout_model.dart';
+import 'package:feature_overlay_tour/src/widgets/fot_scope.dart';
 import 'package:flutter/widgets.dart';
 
 class FeatureOverlayTourTarget extends StatefulWidget {
   const FeatureOverlayTourTarget({
     required GlobalKey key,
+    this.layoutModel = const TwoCellSquareOverlayLayoutModel(),
     this.shape = const RoundedRectangleBorder(),
     this.backgroundColor = const Color(0xAA000000),
-    this.curves = Curves.easeInOutQuart,
     this.overlayPadding = EdgeInsets.zero,
     this.overlayDistanceRatio,
     this.onItemTap,
@@ -22,8 +23,8 @@ class FeatureOverlayTourTarget extends StatefulWidget {
   final Widget child;
   final ShapeBorder shape;
   final Color backgroundColor;
-  final Curve curves;
   final double? overlayDistanceRatio;
+  final OverlayLayoutModel layoutModel;
 
   final FutureOr<void> Function()? onItemTap;
 
@@ -36,13 +37,13 @@ class FeatureOverlayTourTarget extends StatefulWidget {
 class _FeatureOverlayTourTargetState extends State<FeatureOverlayTourTarget> {
   @override
   Widget build(BuildContext context) {
-    FeatureOverlayTourScope.once(context).controller.registerKey(order: widget.order, key: widget.key as GlobalKey);
+    FOTScope.once(context).controller.registerKey(order: widget.order, key: widget.key as GlobalKey);
     return widget.child;
   }
 
   @override
   void deactivate() {
-    FeatureOverlayTourScope.once(context).controller.removeKey(order: widget.order, key: widget.key as GlobalKey);
+    FOTScope.once(context).controller.removeKey(order: widget.order, key: widget.key as GlobalKey);
     super.deactivate();
   }
 }

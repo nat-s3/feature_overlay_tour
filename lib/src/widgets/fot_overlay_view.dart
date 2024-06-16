@@ -1,24 +1,26 @@
 import 'dart:math';
 
-import 'package:feature_overlay_tour/feature_overlay_tour.dart';
+import 'package:feature_overlay_tour/src/model/overlay_layout_model.dart';
 import 'package:feature_overlay_tour/src/widgets/pickup_clipper.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class FeatureOverlayTourOverlay extends StatefulWidget {
-  const FeatureOverlayTourOverlay({
+import '../controllers/fot_controller.dart';
+import 'feature_overlay_tour_target.dart';
+import 'fot_target_data.dart';
+
+class FOTOverlayView extends StatefulWidget {
+  const FOTOverlayView({
     super.key,
     required this.controller,
   });
 
-  final FeatureOverlayTourController controller;
+  final FOTController controller;
 
   @override
-  State<FeatureOverlayTourOverlay> createState() => _FeatureOverlayTourOverlayState();
+  State<FOTOverlayView> createState() => _FOTOverlayViewState();
 }
 
-class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> with SingleTickerProviderStateMixin {
+class _FOTOverlayViewState extends State<FOTOverlayView> with SingleTickerProviderStateMixin {
 
   late AnimationController animationController;
   late CurveTween curveTween;
@@ -43,7 +45,7 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
       parent: animationController,
       curve: const Interval(0.8, 1.0, curve: Curves.fastLinearToSlowEaseIn),
     );
-    
+
     super.initState();
   }
 
@@ -62,7 +64,7 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
       builder: (context, value, child) {
         final gKey = widget.controller.readKey(value.current);
         if (gKey == null) {
-          return const Text('Error');
+          return const Text('Error: Unset GlobalKey');
         }
         final deviceSize = MediaQuery.sizeOf(context);
         final systemPadding = MediaQuery.paddingOf(context);
@@ -70,9 +72,6 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
         final targetPos = targetBox?.localToGlobal(Offset.zero);
         final targetRect = targetBox?.paintBounds;
         final rawTargetWidgetRect = targetPos! & targetRect!.size;
-        // WidgetsBinding.instance.addPostFrameCallback((d) {
-        //   animatedOpacity.value = 1.0;
-        // });
 
         // TargetWidget
         final targetWidget = gKey.currentWidget as FeatureOverlayTourTarget?;
@@ -84,25 +83,15 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
         final distance = Offset(maxDistance, maxDistance).distance * (targetWidget?.overlayDistanceRatio ?? 2.0);
         final targetWidgetRect = (padding ?? EdgeInsets.zero).inflateRect(rawTargetWidgetRect);
         final onTap = targetWidget?.onItemTap;
+        final layoutModel = targetWidget?.layoutModel ?? const VerticalOverlayLayoutModel();
 
         // OverlayWidget
         // 表示可能な領域を計算
-        final overlayRect = systemPadding.deflateRect(
+        final universe = systemPadding.deflateRect(
           Rect.fromLTWH(0, 0, deviceSize.width, deviceSize.height),
         );
-        // TargetWidgetと重ならない縦の領域を取得
-        final pTopSpace = targetWidgetRect.top - overlayRect.top;
-        final pBottomSpace = (overlayRect.top + overlayRect.height) - (targetWidgetRect.top + targetWidgetRect.height);
 
-        // TargetWidgetと重ならない横の領域を取得
-        final pLeftSpace = targetWidgetRect.left - overlayRect.left;
-        final pRightSpace = (overlayRect.left + overlayRect.width) - (targetWidgetRect.left + targetWidgetRect.width);
-        final boxConstraint = BoxConstraints(
-            maxWidth: overlayRect.width,
-            maxHeight: pTopSpace <= pBottomSpace
-                ? pBottomSpace
-                : pTopSpace
-        );
+
 
         return Material(
           color: const Color(0x00000000),
@@ -176,45 +165,20 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
                 ),
               ),
               // Overlay Widget
-              Positioned(
-                // デフォルトの表示位置を調整する
-                top: pTopSpace <= pBottomSpace
-                    ? targetWidgetRect.bottom
-                    : null,
-                bottom: pTopSpace <= pBottomSpace
-                    ? null
-                    : overlayRect.bottom - targetWidgetRect.top,
-                left: pLeftSpace <= pRightSpace
-                    ? overlayRect.left
-                    : null,
-                right: pLeftSpace <= pRightSpace
-                    ? null
-                    : (overlayRect.left + overlayRect.width) - overlayRect.right,
-                child: ConstrainedBox(
-                  constraints: boxConstraint,
-                  child: OverlayPositionData(
-                    constraint: boxConstraint,
-                    targetLocalCenter: Offset(
-                      rawTargetWidgetRect.left - overlayRect.left + rawTargetWidgetRect.width / 2,
-                      rawTargetWidgetRect.top - overlayRect.top + rawTargetWidgetRect.height / 2,
-                    ),
-                    overlayOffset: Offset(
-                      pTopSpace <= pBottomSpace
-                          ? targetWidgetRect.bottom + (pBottomSpace/2)
-                          : overlayRect.bottom - targetWidgetRect.top + (pTopSpace/2),
-                      overlayRect.width / 2,
-                    ),
-                    targetSize: rawTargetWidgetRect.size,
-                    child: AnimatedBuilder(
-                      animation: animationController,
-                      builder: (context, child) {
-                        return Opacity(
-                          opacity: overlayAnimation.value,
-                          child: child!,
-                        );
-                      },
-                      child: overlay,
-                    ),
+              Positioned.fill(
+                child: FOTTargetData(
+                  targetRect: targetWidgetRect,
+                  layoutModel: layoutModel,
+                  universeRect: universe,
+                  child: AnimatedBuilder(
+                    animation: animationController,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: overlayAnimation.value,
+                        child: child!,
+                      );
+                    },
+                    child: overlay,
                   ),
                 ),
               ),
@@ -222,6 +186,45 @@ class _FeatureOverlayTourOverlayState extends State<FeatureOverlayTourOverlay> w
           ),
         );
       },
+    );
+  }
+}
+
+
+class DebugPoint extends StatelessWidget {
+  const DebugPoint({
+    super.key,
+    required this.rect,
+    required this.child,
+  });
+
+  final Rect rect;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Center(
+          child: ColoredBox(
+            color: Colors.green.withOpacity(0.3),
+            child: const SizedBox.expand(),
+          ),
+        ),
+        child,
+        Center(
+            child: Tooltip(
+              message: '$rect',
+              child: const ColoredBox(
+                color: Colors.red,
+                child: SizedBox(
+                  width: 25,
+                  height: 25,
+                ),
+              ),
+            )
+        )
+      ],
     );
   }
 }

@@ -11,8 +11,8 @@ enum DismissMode {
 }
 
 /// 制御を行うためのコントローラー
-class FeatureOverlayTourController {
-  FeatureOverlayTourController({
+class FOTController {
+  FOTController({
     this.duration = const Duration(seconds: 1),
     this.overlayDuration = const Duration(microseconds: 500),
     this.dismissMode = DismissMode.next,
@@ -90,18 +90,7 @@ class FeatureOverlayTourController {
 
   /// 次に移動する
   Future<void> next() async {
-    final current = state.value;
-
-    final orders = _keyMap.keys.toList()..sort();
-    int? next;
-    for (final order in orders) {
-      if (current.current == null) {
-        next = order;
-        break;
-      } else if (current.current! < order) {
-        next = order;
-      }
-    }
+    int? next = nextIndex;
 
     final newValue = state.value.copyWith(current: next, show: next != null);
     final aniCon = await _waitAniCon();
@@ -120,6 +109,31 @@ class FeatureOverlayTourController {
 
   /// 1つ戻る
   Future<void> pref() async {
+    int? next = prefIndex;
+
+    state.value = state.value.copyWith(current: next, show: next != null);
+  }
+
+  int? get nextIndex {
+    final current = state.value;
+
+    final orders = _keyMap.keys.toList()..sort();
+    int? next;
+    for (final order in orders) {
+      if (current.current == null) {
+        next = order;
+        break;
+      } else if (current.current! < order) {
+        next = order;
+        break;
+      }
+    }
+
+    return next;
+  }
+
+
+  int? get prefIndex {
     final current = state.value;
 
     final orders = (_keyMap.keys.toList()..sort()).reversed.toList();
@@ -130,9 +144,10 @@ class FeatureOverlayTourController {
         break;
       } else if (order < current.current!) {
         next = order;
+        break;
       }
     }
 
-    state.value = state.value.copyWith(current: next, show: next != null);
+    return next;
   }
 }
