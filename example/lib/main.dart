@@ -12,259 +12,220 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const containerSize = Size(200, 200);
+    final valueNotify = ValueNotifier(false);
+    final viewNotify = ValueNotifier(false);
+
     return MaterialApp(
-      home: FeatureOverlayTour(
-        child: Scaffold(
-          body: SafeArea(
-            minimum: const EdgeInsets.all(50),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-                        shape: const StadiumBorder(),
-                        order: 0,
-                        overlayPadding: const EdgeInsets.all(10),
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FOTOverlayLayout(
-                          padding: const EdgeInsets.all(20),
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Theme.of(context).colorScheme.surfaceContainer,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                FilledButton(
-                                  onPressed: () {
-                                    FOTScope.once(context).controller.next();
-                                  },
-                                  child: const Text('next'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // overlay: FeatureOverlayTourTooltipFrame(
-                        //   child: Container(
-                        //     width: containerSize.width,
-                        //     height: containerSize.height,
-                        //     color: Theme.of(context).colorScheme.surfaceContainer,
-                        //     child: Column(
-                        //       mainAxisSize: MainAxisSize.min,
-                        //       children: [
-                        //         FilledButton(
-                        //           onPressed: () {
-                        //             FOTScope.once(context).controller.next();
-                        //           },
-                        //           child: const Text('next'),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            FOTScope.once(context).controller.launch();
-                          },
-                          child: const Text('Overlay'),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 1,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 2,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: Builder(
-                      builder: (context) {
-                        return FeatureOverlayTourTarget(
-                          key: GlobalKey(),
-                          overlayPadding: const EdgeInsets.all(20),
-                          order: 3,
-                          onItemTap: FOTScope.once(context).controller.next,
-                          overlay: FeatureOverlayTourTooltipFrame(
-                            child: Container(
-                              width: containerSize.width,
-                              height: containerSize.height,
-                              color: Colors.white.withOpacity(0.5),
-                              child: const Text('Container2'),
-                            ),
-                          ),
-                          child: const Text('Target'),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 4,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 5,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 6,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 7,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Builder(
-                    builder: (context) {
-                      return FeatureOverlayTourTarget(
-                        key: GlobalKey(),
-
-                        overlayPadding: const EdgeInsets.all(20),
-                        order: 8,
-                        onItemTap: FOTScope.once(context).controller.next,
-                        overlay: FeatureOverlayTourTooltipFrame(
-                          child: Container(
-                            width: containerSize.width,
-                            height: containerSize.height,
-                            color: Colors.white.withOpacity(0.5),
-                            child: const Text('Container2'),
-                          ),
-                        ),
-                        child: const Text('Target'),
-                      );
-                    },
-                  ),
-                ),
-              ],
+      themeMode: ThemeMode.system,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(
+          actions: [
+            ValueListenableBuilder(
+              valueListenable: valueNotify,
+              builder: (context, value, child) {
+                if (value == false) {
+                  return child!;
+                }
+                return const SizedBox.shrink();
+              },
+              child: ValueListenableBuilder(
+                valueListenable: viewNotify,
+                builder: (context, value, child) {
+                  return IconButton(
+                    onPressed: () => viewNotify.value = !viewNotify.value,
+                    icon: value ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
+                  );
+                },
+              ),
             ),
-          ),
+            IconButton(
+              onPressed: () => valueNotify.value = !valueNotify.value,
+              icon: const Icon(Icons.change_circle),
+            ),
+          ],
+        ),
+        body: ValueListenableBuilder(
+          valueListenable: valueNotify,
+          builder: (context, value, child) {
+            if (!value) {
+              return OverlaySample2(
+                viewNotify: viewNotify,
+              );
+            }
+            const containerSize = Size(200, 200);
+
+            return FeatureOverlayTour(
+              child: SafeArea(
+                minimum: const EdgeInsets.all(50),
+                child: Builder(
+                  builder: (context) {
+                    final controlCard = Card(
+                      elevation: 0,
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FilledButton(
+                              onPressed: () {
+                                FOTScope.once(context).controller.next();
+                              },
+                              child: const Text('next'),
+                            ),
+                            FilledButton(
+                              onPressed: () {
+                                FOTScope.once(context).controller.pref();
+                              },
+                              child: const Text('pref'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+
+                    return Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+                            shape: const StadiumBorder(),
+                            order: 0,
+                            overlayPadding: const EdgeInsets.all(10),
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                FOTScope.once(context).controller.launch();
+                              },
+                              child: const Text('Overlay'),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 1,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 2,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: FeatureOverlayTourTarget(
+                              key: GlobalKey(),
+                              overlayPadding: const EdgeInsets.all(20),
+                              order: 3,
+                              onItemTap: FOTScope.once(context).controller.next,
+                              overlay: FeatureOverlayTourTooltipFrame(
+                                child: controlCard,
+                              ),
+                              child: const Text('Target'),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 4,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 5,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 6,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 7,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: FeatureOverlayTourTarget(
+                            key: GlobalKey(),
+
+                            overlayPadding: const EdgeInsets.all(20),
+                            order: 8,
+                            onItemTap: FOTScope.once(context).controller.next,
+                            overlay: FeatureOverlayTourTooltipFrame(
+                              child: controlCard,
+                            ),
+                            child: const Text('Target'),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -273,16 +234,22 @@ class MainApp extends StatelessWidget {
 
 
 class OverlaySample2 extends StatelessWidget {
-  const OverlaySample2({super.key});
+  const OverlaySample2({
+    super.key,
+    required this.viewNotify,
+  });
+
+  final ValueNotifier<bool> viewNotify;
 
   @override
   Widget build(BuildContext context) {
     final xNotify = ValueNotifier(200);
     final yNotify = ValueNotifier(200);
 
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
+    return ValueListenableBuilder(
+      valueListenable: viewNotify,
+      builder: (context, useTheme, child) {
+        return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -386,12 +353,12 @@ class OverlaySample2 extends StatelessWidget {
                                       duration: duration,
                                       curve: curve,
                                       alignment: overlayAlign,
-                                      child: const SizedBox(
+                                      child: SizedBox(
                                         width: 100,
                                         height: 100,
                                         child: ColoredBox(
-                                          color: Colors.yellow,
-                                          child: Center(),
+                                          color: useTheme ? Colors.transparent : Colors.yellow,
+                                          child: const Center(),
                                         ),
                                       ),
                                     ),
@@ -404,9 +371,9 @@ class OverlaySample2 extends StatelessWidget {
                                         child: SizedBox(
                                           width: 100 - allowSize.toDouble(),
                                           height: 100 - allowSize.toDouble(),
-                                          child: const ColoredBox(
-                                            color: Colors.deepOrange,
-                                            child: Center(),
+                                          child: ColoredBox(
+                                            color: useTheme ? Theme.of(context).colorScheme.surfaceContainer : Colors.deepOrange,
+                                            child: const Center(),
                                           ),
                                         ),
                                       ),
@@ -422,7 +389,7 @@ class OverlaySample2 extends StatelessWidget {
                                         height: allowSize.toDouble(),
                                         child: CustomPaint(
                                           painter: TrianglePainter(
-                                            color: Colors.purple,
+                                            color: useTheme ? Theme.of(context).colorScheme.surfaceContainer : Colors.purple,
                                             vertex: (){
                                               if (trianglePoint.dy < targetV.dy) {
                                                 return TrianglePainterVertex.bottom;
@@ -504,8 +471,8 @@ class OverlaySample2 extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
